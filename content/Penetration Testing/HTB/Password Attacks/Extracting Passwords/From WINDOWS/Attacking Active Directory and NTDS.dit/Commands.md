@@ -48,6 +48,7 @@ net user <USERNAME>
 ### 3. Creating shadow copy of C:
 
 - Copy the disk where AD was installed. Most likely it gets installed in `C:` drive so use `vssadmin` to make a copy of that drive.
+- creates a shadow copy of the `C:` drive. The shadow copy path will be shown use that in the copying of `NTDS.dit` from the VSS.
 
 ```cmd
 vssadmin CREATE SHADOW /For=C:
@@ -55,6 +56,15 @@ vssadmin CREATE SHADOW /For=C:
 
 ### 4. Copying NTDS.dit from the VSS
 
+- `/c` tells the `cmd.exe` to run `copy` command and immediately close itself when finished.
+
 ```cmd
-cmd.exe /c 
+cmd.exe /c copy <SHADOW FILE PATH>
 ```
+
+### 5. Transferring NTDS.dit to attack host
+
+- Checkout Windows to Linux transfer methods
+- Before transferring rename the `NTDS.dit` file because AD might block the file from transferring by checking its name since its a critical file.
+
+
