@@ -54,6 +54,9 @@ net user <USERNAME>
 vssadmin CREATE SHADOW /For=C:
 ```
 
+**SHADOW FILE PATH : A `shadow file path` refers to the unique, system-level address used by Windows to point inside a **Volume Shadow Copy (VSS) snapshot rather than the active, live hard drive. Windows doesn't give it a normal letter like `D:` or `E:`. Instead, it assigns it a device path for example => (`\\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy2`).**
+
+
 ### 4. Copying NTDS.dit from the VSS
 
 - `/c` tells the `cmd.exe` to run `copy` command and immediately close itself when finished.
