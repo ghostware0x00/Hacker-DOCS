@@ -8,12 +8,15 @@ const ignore = require('ignore');
 const app = express();
 const PORT = 3000;
 
-app.use(express.static('public'));
+// Disable cache for public folder
+app.use(express.static('public', { etag: false, maxAge: 0 }));
 
 const contentDir = path.join(__dirname, 'content');
 
-// Serve content at /content/ (used by script.js fetch calls) and /files/ (legacy)
-app.use('/content', express.static(contentDir));
+// Serve content at /content/ and /files/ while forcing the browser to load fresh files every time
+app.use('/content', express.static(contentDir, { etag: false, maxAge: 0 }));
+app.use('/files', express.static(contentDir, { etag: false, maxAge: 0 }));
+
 app.use('/files', express.static(contentDir));
 
 // Register NASM as x86asm for highlight.js to support specific code blocks
