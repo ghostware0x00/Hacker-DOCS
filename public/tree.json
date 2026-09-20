@@ -512,14 +512,33 @@
                     "type": "directory",
                     "children": [
                       {
-                        "name": "Commands.md",
-                        "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From LINUX/Commands.md",
-                        "type": "file"
+                        "name": "Credential Hunting in LINUX",
+                        "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From LINUX/Credential Hunting in LINUX",
+                        "type": "directory",
+                        "children": [
+                          {
+                            "name": "Commands.md",
+                            "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From LINUX/Credential Hunting in LINUX/Commands.md",
+                            "type": "file"
+                          },
+                          {
+                            "name": "Theory and Solutions.md",
+                            "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From LINUX/Credential Hunting in LINUX/Theory and Solutions.md",
+                            "type": "file"
+                          }
+                        ]
                       },
                       {
-                        "name": "Theory and Solutions.md",
-                        "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From LINUX/Theory and Solutions.md",
-                        "type": "file"
+                        "name": "LINUX Authentication Process",
+                        "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From LINUX/LINUX Authentication Process",
+                        "type": "directory",
+                        "children": [
+                          {
+                            "name": "Theory and Solutions.md",
+                            "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From LINUX/LINUX Authentication Process/Theory and Solutions.md",
+                            "type": "file"
+                          }
+                        ]
                       }
                     ]
                   },
@@ -546,14 +565,89 @@
                     "type": "directory",
                     "children": [
                       {
-                        "name": "Commands.md",
-                        "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From WINDOWS/Commands.md",
-                        "type": "file"
+                        "name": "Attacking Active Directory and NTDS.dit",
+                        "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From WINDOWS/Attacking Active Directory and NTDS.dit",
+                        "type": "directory",
+                        "children": [
+                          {
+                            "name": "Commands.md",
+                            "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From WINDOWS/Attacking Active Directory and NTDS.dit/Commands.md",
+                            "type": "file"
+                          },
+                          {
+                            "name": "Theory and Questions.md",
+                            "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From WINDOWS/Attacking Active Directory and NTDS.dit/Theory and Questions.md",
+                            "type": "file"
+                          }
+                        ]
                       },
                       {
-                        "name": "Theory and Solutions.md",
-                        "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From WINDOWS/Theory and Solutions.md",
-                        "type": "file"
+                        "name": "Attacking CREDENTIAL MANAGER",
+                        "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From WINDOWS/Attacking CREDENTIAL MANAGER",
+                        "type": "directory",
+                        "children": [
+                          {
+                            "name": "Commands.md",
+                            "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From WINDOWS/Attacking CREDENTIAL MANAGER/Commands.md",
+                            "type": "file"
+                          },
+                          {
+                            "name": "Theory and Solutions.md",
+                            "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From WINDOWS/Attacking CREDENTIAL MANAGER/Theory and Solutions.md",
+                            "type": "file"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Attacking LSASS",
+                        "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From WINDOWS/Attacking LSASS",
+                        "type": "directory",
+                        "children": [
+                          {
+                            "name": "Commands.md",
+                            "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From WINDOWS/Attacking LSASS/Commands.md",
+                            "type": "file"
+                          },
+                          {
+                            "name": "Theory and Solutions.md",
+                            "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From WINDOWS/Attacking LSASS/Theory and Solutions.md",
+                            "type": "file"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Attacking SAM SYSTEM SECURITY",
+                        "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From WINDOWS/Attacking SAM SYSTEM SECURITY",
+                        "type": "directory",
+                        "children": [
+                          {
+                            "name": "Commands.md",
+                            "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From WINDOWS/Attacking SAM SYSTEM SECURITY/Commands.md",
+                            "type": "file"
+                          },
+                          {
+                            "name": "Theory and Solutions.md",
+                            "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From WINDOWS/Attacking SAM SYSTEM SECURITY/Theory and Solutions.md",
+                            "type": "file"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Credential Hunting in WINDOWS",
+                        "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From WINDOWS/Credential Hunting in WINDOWS",
+                        "type": "directory",
+                        "children": [
+                          {
+                            "name": "Commands.md",
+                            "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From WINDOWS/Credential Hunting in WINDOWS/Commands.md",
+                            "type": "file"
+                          },
+                          {
+                            "name": "Theory and Solutions.md",
+                            "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From WINDOWS/Credential Hunting in WINDOWS/Theory and Solutions.md",
+                            "type": "file"
+                          }
+                        ]
                       }
                     ]
                   }

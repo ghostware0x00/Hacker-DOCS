@@ -54,18 +54,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Fetch Tree
+  // Fetch Tree (Dynamic API with static fallback for GitHub Pages)
   async function fetchTree() {
     try {
-      // Use relative path for tree.json
-      const res = await fetch('./tree.json');
+      let res = await fetch('/api/tree').catch(() => null);
+      if (!res || !res.ok) {
+        // Fallback to static tree.json for GitHub Pages
+        res = await fetch('tree.json').catch(() => null) || await fetch('public/tree.json');
+      }
+      if (!res || !res.ok) throw new Error(`HTTP ${res ? res.status : 'offline'}`);
       const tree = await res.json();
       navContainer.innerHTML = '';
       const ul = buildTreeUI(tree);
       navContainer.appendChild(ul);
     } catch (e) {
       console.error('Failed to load tree:', e);
-      navContainer.innerHTML = '<div style="color:var(--red);">Error loading files (Static mode)</div>';
+      navContainer.innerHTML = '<div style="color:var(--red);padding:15px;">Error loading files</div>';
     }
   }
 
@@ -134,34 +138,51 @@ document.addEventListener('DOMContentLoaded', () => {
     markdownBody.innerHTML = '<div style="text-align:center;color:var(--text-muted);margin-top:50px;">Loading... ⚡</div>';
     
     try {
-      const res = await fetch(`./content/${path}`);
-      if (!res.ok) throw new Error(`File not found: ${res.status}`);
-      let content = await res.text();
+      let renderedHtml = null;
 
-      const renderer = new marked.Renderer();
-      const folderPath = path.includes('/') ? path.split('/').slice(0, -1).join('/') : '';
-      
-      renderer.image = ({ href, title, text }) => {
-        let finalHref = href;
-        if (finalHref && !finalHref.startsWith('http') && !finalHref.startsWith('/') && !finalHref.startsWith('./content/')) {
-          finalHref = `./content/${folderPath ? folderPath + '/' : ''}${finalHref}`;
+      // 1. Try server-rendered HTML first (when running node server.js)
+      try {
+        const apiRes = await fetch(`/api/content?path=${encodeURIComponent(path)}`);
+        if (apiRes.ok) {
+          const data = await apiRes.json();
+          if (data && data.html) renderedHtml = data.html;
         }
-        let out = `<img src="${finalHref}" alt="${text}"`;
-        if (title) out += ` title="${title}"`;
-        out += '>';
-        return out;
-      };
+      } catch (err) {
+        // Express API not running, fall back to static mode
+      }
 
-      content = content.replace(/!\[\[(.*?)\]\]/g, (match, p1) => {
-        const imgPath = `./content/${folderPath ? folderPath + '/' : ''}${p1}`;
-        return `![Obsidian Image](${imgPath})`;
-      });
+      // 2. If no server HTML (e.g., on GitHub Pages), fetch raw markdown and render on client
+      if (!renderedHtml) {
+        const res = await fetch(`./content/${path}`);
+        if (!res.ok) throw new Error(`File not found: ${res.status}`);
+        let content = await res.text();
 
-      // Parse markdown with GFM enabled (required for tables)
-      const htmlContent = marked.parse(content, { renderer, gfm: true, breaks: false });
-      markdownBody.innerHTML = `<div class="fade-in">${htmlContent}</div>`;
-      
-      // Highlight and decorate code blocks
+        const renderer = new marked.Renderer();
+        const folderPath = path.includes('/') ? path.split('/').slice(0, -1).join('/') : '';
+        
+        renderer.image = ({ href, title, text }) => {
+          let finalHref = href;
+          if (finalHref && !finalHref.startsWith('http') && !finalHref.startsWith('/') && !finalHref.startsWith('./content/')) {
+            const cleanHref = finalHref.replace(/^\.\//, '');
+            finalHref = `./content/${folderPath ? folderPath + '/' : ''}${cleanHref}`;
+          }
+          let out = `<img src="${finalHref}" alt="${text || ''}"`;
+          if (title) out += ` title="${title}"`;
+          out += '>';
+          return out;
+        };
+
+        // Support Obsidian image format ![[filename.png]]
+        content = content.replace(/!\[\[(.*?)\]\]/g, (match, p1) => {
+          const cleanP1 = p1.replace(/^\.\//, '');
+          const imgPath = `./content/${folderPath ? folderPath + '/' : ''}${cleanP1}`;
+          return `![Obsidian Image](${imgPath})`;
+        });
+
+        renderedHtml = marked.parse(content, { renderer, gfm: true, breaks: false });
+      }
+
+      markdownBody.innerHTML = `<div class="fade-in">${renderedHtml}</div>`;
       decorateCodeBlocks();
 
     } catch (e) {

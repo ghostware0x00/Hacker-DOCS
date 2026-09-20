@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node server.js",
     "start": "node server.js",
-    "build": "node -e \"const fs = require('fs'); const path = require('path'); const contentDir = 'content'; function getTree(dir, base = '') { let tree = []; if (!fs.existsSync(dir)) return []; const items = fs.readdirSync(dir, { withFileTypes: true }); items.forEach(item => { if (item.name.startsWith('.')) return; const relPath = path.posix.join(base, item.name); if (item.isDirectory()) { const children = getTree(path.join(dir, item.name), relPath); if (children.length > 0) tree.push({ name: item.name, path: relPath, type: 'directory', children }); } else if (item.name.endsWith('.md')) { tree.push({ name: item.name, path: relPath, type: 'file' }); } }); return tree.sort((a, b) => (a.type === b.type ? a.name.localeCompare(b.name) : a.type === 'directory' ? -1 : 1)); } const tree = getTree(contentDir); fs.writeFileSync('tree.json', JSON.stringify(tree, null, 2)); console.log('Generated tree.json');\"",
+    "build": "node build-tree.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

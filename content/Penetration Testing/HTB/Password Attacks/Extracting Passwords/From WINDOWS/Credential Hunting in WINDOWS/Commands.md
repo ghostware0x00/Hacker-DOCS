@@ -1,8 +1,6 @@
 
 ## Hunt Credentials
 
-
-
 ### using `LaZagne`
 
 - **SETUP**

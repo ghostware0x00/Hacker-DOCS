@@ -91,20 +91,23 @@ app.get('/api/content', (req, res) => {
 
   try {
     let content = fs.readFileSync(absolutePath, 'utf8');
-    // Basic Obsidian image parsing ![[image.png]]
-    content = content.replace(/!\[\[(.*?)\]\]/g, '![Obsidian Image](/files/$1)');
-    
     const folderPath = path.posix.dirname(relPath);
+    
+    // Basic Obsidian image parsing ![[image.png]]
+    content = content.replace(/!\[\[(.*?)\]\]/g, (match, p1) => {
+      const cleanP1 = p1.replace(/^\.\//, '');
+      return `![Obsidian Image](/files/${path.posix.join(folderPath, cleanP1)})`;
+    });
     
     // Customize marked renderer to prepend path to local images
     const renderer = new marked.Renderer();
     renderer.image = ({ href, title, text }) => {
       let finalHref = href;
-      if(finalHref && !finalHref.startsWith('http') && !finalHref.startsWith('/files/')) {
-        // Prepend the /files + folder path
-        finalHref = '/files/' + path.posix.join(folderPath, finalHref).replace(/\\/g, '/');
+      if (finalHref && !finalHref.startsWith('http') && !finalHref.startsWith('/files/')) {
+        const cleanHref = finalHref.replace(/^\.\//, '');
+        finalHref = '/files/' + path.posix.join(folderPath, cleanHref).replace(/\\/g, '/');
       }
-      let out = '<img src="' + finalHref + '" alt="' + text + '"';
+      let out = '<img src="' + finalHref + '" alt="' + (text || '') + '"';
       if (title) {
         out += ' title="' + title + '"';
       }
