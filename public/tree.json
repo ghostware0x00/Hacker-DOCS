@@ -548,14 +548,21 @@
                     "type": "directory",
                     "children": [
                       {
-                        "name": "Commands.md",
-                        "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From NETWORK/Commands.md",
-                        "type": "file"
-                      },
-                      {
-                        "name": "Theory and Solutions.md",
-                        "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From NETWORK/Theory and Solutions.md",
-                        "type": "file"
+                        "name": "Credential Hunting in Network Traffic",
+                        "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From NETWORK/Credential Hunting in Network Traffic",
+                        "type": "directory",
+                        "children": [
+                          {
+                            "name": "Commands.md",
+                            "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From NETWORK/Credential Hunting in Network Traffic/Commands.md",
+                            "type": "file"
+                          },
+                          {
+                            "name": "Theory and Solutions.md",
+                            "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From NETWORK/Credential Hunting in Network Traffic/Theory and Solutions.md",
+                            "type": "file"
+                          }
+                        ]
                       }
                     ]
                   },
