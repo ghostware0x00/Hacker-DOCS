@@ -548,6 +548,23 @@
                     "type": "directory",
                     "children": [
                       {
+                        "name": "Credential Hunting in Network Shares",
+                        "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From NETWORK/Credential Hunting in Network Shares",
+                        "type": "directory",
+                        "children": [
+                          {
+                            "name": "Commands.md",
+                            "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From NETWORK/Credential Hunting in Network Shares/Commands.md",
+                            "type": "file"
+                          },
+                          {
+                            "name": "Theory and Solutions.md",
+                            "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From NETWORK/Credential Hunting in Network Shares/Theory and Solutions.md",
+                            "type": "file"
+                          }
+                        ]
+                      },
+                      {
                         "name": "Credential Hunting in Network Traffic",
                         "path": "Penetration Testing/HTB/Password Attacks/Extracting Passwords/From NETWORK/Credential Hunting in Network Traffic",
                         "type": "directory",
