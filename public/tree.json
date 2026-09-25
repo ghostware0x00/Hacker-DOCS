@@ -753,6 +753,30 @@
                 ]
               },
               {
+                "name": "Pass the Hash (PtH)",
+                "path": "Penetration Testing/HTB/Password Attacks/Pass the Hash (PtH)",
+                "type": "directory",
+                "children": [
+                  {
+                    "name": "PtH",
+                    "path": "Penetration Testing/HTB/Password Attacks/Pass the Hash (PtH)/PtH",
+                    "type": "directory",
+                    "children": [
+                      {
+                        "name": "Commands.md",
+                        "path": "Penetration Testing/HTB/Password Attacks/Pass the Hash (PtH)/PtH/Commands.md",
+                        "type": "file"
+                      },
+                      {
+                        "name": "Theory and Solutions.md",
+                        "path": "Penetration Testing/HTB/Password Attacks/Pass the Hash (PtH)/PtH/Theory and Solutions.md",
+                        "type": "file"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
                 "name": "Remote Attacks",
                 "path": "Penetration Testing/HTB/Password Attacks/Remote Attacks",
                 "type": "directory",
