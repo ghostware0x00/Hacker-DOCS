@@ -120,12 +120,6 @@ Rubeus.exe ptt /ticket:<kirbi_BASE64_text>
 ```
 
 
-#### STEP 3: Pass the Ticket (PtT) REMOTE
-
-
-
-
-
 
 
 
