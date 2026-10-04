@@ -782,6 +782,23 @@
                 "type": "directory",
                 "children": [
                   {
+                    "name": "PtT for Linux",
+                    "path": "Penetration Testing/HTB/Password Attacks/Pass the Ticket (PtT)/PtT for Linux",
+                    "type": "directory",
+                    "children": [
+                      {
+                        "name": "Commands.md",
+                        "path": "Penetration Testing/HTB/Password Attacks/Pass the Ticket (PtT)/PtT for Linux/Commands.md",
+                        "type": "file"
+                      },
+                      {
+                        "name": "Theory and Questions.md",
+                        "path": "Penetration Testing/HTB/Password Attacks/Pass the Ticket (PtT)/PtT for Linux/Theory and Questions.md",
+                        "type": "file"
+                      }
+                    ]
+                  },
+                  {
                     "name": "PtT for Windows",
                     "path": "Penetration Testing/HTB/Password Attacks/Pass the Ticket (PtT)/PtT for Windows",
                     "type": "directory",
