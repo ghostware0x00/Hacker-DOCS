@@ -488,7 +488,7 @@ Valid starting       Expires              Service principal
         renew until 10/06/2026 19:25:31
 ```
 
-Now that we have passed the ticket of the machine user account `LINUX01`. We can use `smblclient` to connect to the share and download the `flag.txt` and read its contents.
+Now that we have passed the ticket of the machine user account `LINUX01`. We can use `smblclient` to connect to the share and download the `flag.txt` and read its content.
 
 ```bash
 root@linux01:/tmp# smbclient //DC01/linux01 -c 'ls' -k -no-pass
