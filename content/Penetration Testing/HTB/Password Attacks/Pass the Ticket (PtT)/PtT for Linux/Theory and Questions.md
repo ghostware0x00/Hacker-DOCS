@@ -21,6 +21,49 @@
 
 - an environment variable that tells Kerberos where to find the active user's credentials and ticket cache
 
+ 
+ 
+## What does the `ccache` file contain?
+
+A credential cache (`ccache`) file is a binary file that stores your **temporary network passports**. It **does not** contain the user's cleartext password, and it **does not** contain the user's NTLM hash.
+
+Instead, it contains two primary things:
+
+- **The TGT (Ticket Granting Ticket):** This is an encrypted piece of data issued by the Active Directory Domain Controller (DC). It serves as proof that the user successfully logged in earlier.
+- **Session Keys:** Cryptographic keys that the client uses to encrypt communication with the Domain Controller when asking for access to specific network resources (like file shares).
+
+## What does `SSSD` contain?
+
+**SSSD** (System Security Services Daemon) is a background system service, not a single file.
+
+- It holds the **active configurations and connections** to the Active Directory domain controller.
+- It handles a local cache database (usually under `/var/lib/sss/db/`) containing user information (like UIDs, groups, and SIDs) so the Linux machine knows what permissions Active Directory users have locally.
+- When a user logs in, SSSD is the mechanism that talks to the DC, receives the Kerberos TGT, and **writes it down into the `ccache` file** inside `/tmp`.
+
+## Why does exporting the `KRB5CCNAME` trigger a Pass-the-Ticket?
+
+When you run `export KRB5CCNAME=/tmp/krb5cc_...`, you are exploiting a fundamental rule of how the Kerberos client libraries work on Linux.
+
+Here is the step-by-step sequence of the attack:
+
+Step A: Changing the Pointer
+
+By default, every process checks the environment variable `KRB5CCNAME` to find its Kerberos tickets. When you change this variable to point to Julio’s ticket file, you are changing the system's "pointer."
+
+Step B: Running `klist`
+
+When you type `klist`, the command does not check your local Linux username (`whoami`). Instead, it reads the path specified in `KRB5CCNAME`, parses the binary data inside that specific `ccache` file, and prints out the owner (`Default principal: julio@INLANEFREIGHT.HTB`) and the TGT details.
+
+Step C: The Network Interaction (The "Pass")
+
+When you use a network tool like `smbclient.py -k`, the tool automatically reads the `KRB5CCNAME` variable, pulls the TGT out of Julio's `ccache` file, and sends it directly across the network to the Windows Domain Controller.
+
+Because the TGT is cryptographically signed by the Domain Controller itself, the Domain Controller trusts it blindly. The DC reads the ticket, sees that it belongs to Julio, and says: _"This ticket is valid. You have access to Julio's files."_
+
+The DC has no idea that a local Linux `root` user stole the file from `/tmp`; it only sees a perfectly valid network passport.
+
+Now that you know how the Kerberos storage functions, if you ran into a `session setup failed: NT_STATUS_INVALID_PARAMETER` error on your last SMB attempt, it usually means the tool struggled with the domain format or the machine name resolution.
+
 ---
 ## Questions and Solutions
 
