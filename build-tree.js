@@ -49,4 +49,15 @@ if (fs.existsSync(path.join(__dirname, 'public'))) {
   fs.writeFileSync(path.join(__dirname, 'public', 'tree.json'), json);
 }
 
-console.log(`Successfully generated tree.json and public/tree.json`);
+// GitHub Pages only serves static files. Assemble the complete site into dist
+// so the deployment workflow can publish it without exposing source files.
+const distDir = path.join(__dirname, 'dist');
+fs.rmSync(distDir, { recursive: true, force: true });
+fs.mkdirSync(distDir, { recursive: true });
+fs.copyFileSync(path.join(__dirname, 'index.html'), path.join(distDir, 'index.html'));
+fs.cpSync(path.join(__dirname, 'public'), path.join(distDir, 'public'), { recursive: true });
+fs.cpSync(contentDir, path.join(distDir, 'content'), { recursive: true });
+fs.copyFileSync(path.join(__dirname, 'tree.json'), path.join(distDir, 'tree.json'));
+fs.writeFileSync(path.join(distDir, '.nojekyll'), '');
+
+console.log('Generated static GitHub Pages site in dist/');
