@@ -18,11 +18,11 @@
 
 ### What is this NTLM Relay thing ????
 
-[ESC8 attack path logic and methodology](https://share.google/aimode/xejPvLcwJnYwdGh8D)
-
+- Instead of cracking it offline, we pass the NTLM hash to the web enrollment by intercepting the authentication packet and authenticate ourselves as that particular user.
 
 ## ESC8 
 
-- Allows an attacker to achieve Domain Admin privileges by combining an NTLM relay attack with a technique known as **Pass the Certificate**.
+- Allows an attacker to achieve Domain Admin privileges by combining an NTLM relay attack with a technique known as **Pass the Certificate**. By passing the certificate we get **Kerberso Tickets**.
 - ADCS supports multiple enrollment methods like the `Web Enrollment` which defaults to HTTP. This webpage which allows this `web enrollment` is typically hosted at `http://<CA-IP>/certsrv/`.
 
+---
