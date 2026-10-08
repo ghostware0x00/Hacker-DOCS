@@ -12,10 +12,9 @@ impacket-ntlmrelayx -t http://<TARGET_IP>/certsrv/certfnsh.asp --adcs -smb2suppo
 - Attackers can either wait for the victim machine to attempt authentication or they can force the victim machines to attempt authentication by exploiting the **printer bug**. This requires the victim machine to have `Printer Spooler` service running.
 
 - **HOW THE PRINTER SPOOFER ATTACK WORKS** :
-	1. **The Request:** An attacker with low-privileged, ordinary domain user credentials sends a specific remote procedure call (RPC) request (`RpcRemoteFindFirstPrinterChangeNotificationEx`) to a target server running the Windows Print Spooler service. 
-	2. **The Trick:** This request forces the target server to check for "printer updates" by reaching out to an external path.
-	3. **The Forced Handshake:** The target server automatically attempts to connect back to the attacker-controlled machine, transmitting its own high-level computer account credentials (via NTLM or Kerberos) in the process.
-	4. **CONNECTION** : now print spoofer used to force dc to send its ntlm hash and impacket listener is used to receive the ntlm hash packet.
+	1. **Request** : The coercion tool forces the DC to communicate with the attacker machine. It says it wants to authenticate itself using NTLM.
+	2. **Trick** : The attacker machine then communicates with the `Web Enrollment` site and tells that the attacker wants to authenticate itself so the site generates a random challenge to verify the attacker's authenticity. If its able to encrypt the challenge using the correct hashing algorithm then it authenticates itself as that particular user.
+	3. **Relay** : The attacker takes the random challenge and sends to the DC, which uses its own NTLM to encrypt it and then the attacker takes the response and sends the response back to the `Web Enrollment Site` and authenticates as the DC. We use this attack path to get the **Certificate** which we use again to get the **Kerberos Ticket (TGT)***.
 
 
 ```bash
