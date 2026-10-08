@@ -753,6 +753,23 @@
                 ]
               },
               {
+                "name": "Pass the Certificate (PtC)",
+                "path": "Penetration Testing/HTB/Password Attacks/Pass the Certificate (PtC)",
+                "type": "directory",
+                "children": [
+                  {
+                    "name": "Commands.md",
+                    "path": "Penetration Testing/HTB/Password Attacks/Pass the Certificate (PtC)/Commands.md",
+                    "type": "file"
+                  },
+                  {
+                    "name": "Theory and Questions.md",
+                    "path": "Penetration Testing/HTB/Password Attacks/Pass the Certificate (PtC)/Theory and Questions.md",
+                    "type": "file"
+                  }
+                ]
+              },
+              {
                 "name": "Pass the Hash (PtH)",
                 "path": "Penetration Testing/HTB/Password Attacks/Pass the Hash (PtH)",
                 "type": "directory",

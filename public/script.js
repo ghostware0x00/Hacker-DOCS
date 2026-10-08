@@ -1,3 +1,6 @@
+const appScriptUrl = document.currentScript ? document.currentScript.src : window.location.href;
+const appBaseUrl = new URL('../', appScriptUrl);
+
 document.addEventListener('DOMContentLoaded', () => {
   const navContainer = document.getElementById('nav-container');
   const markdownBody = document.getElementById('markdown-body');
@@ -57,10 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Fetch Tree (Dynamic API with static fallback for GitHub Pages)
   async function fetchTree() {
     try {
-      let res = await fetch('/api/tree').catch(() => null);
+      let res = await fetch(new URL('api/tree', appBaseUrl)).catch(() => null);
       if (!res || !res.ok) {
         // Fallback to static tree.json for GitHub Pages
-        res = await fetch('tree.json').catch(() => null) || await fetch('public/tree.json');
+        res = await fetch(new URL('tree.json', appBaseUrl)).catch(() => null);
       }
       if (!res || !res.ok) throw new Error(`HTTP ${res ? res.status : 'offline'}`);
       const tree = await res.json();
@@ -142,7 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // 1. Try server-rendered HTML first (when running node server.js)
       try {
-        const apiRes = await fetch(`/api/content?path=${encodeURIComponent(path)}`);
+        const apiUrl = new URL('api/content', appBaseUrl);
+        apiUrl.searchParams.set('path', path);
+        const apiRes = await fetch(apiUrl);
         if (apiRes.ok) {
           const data = await apiRes.json();
           if (data && data.html) renderedHtml = data.html;
@@ -153,30 +158,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // 2. If no server HTML (e.g., on GitHub Pages), fetch raw markdown and render on client
       if (!renderedHtml) {
-        const res = await fetch(`./content/${path}`);
+        const markdownUrl = new URL(`content/${path.split('/').map(encodeURIComponent).join('/')}`, appBaseUrl);
+        const res = await fetch(markdownUrl);
         if (!res.ok) throw new Error(`File not found: ${res.status}`);
         let content = await res.text();
 
         const renderer = new marked.Renderer();
-        const folderPath = path.includes('/') ? path.split('/').slice(0, -1).join('/') : '';
-        
         renderer.image = ({ href, title, text }) => {
-          let finalHref = href;
-          if (finalHref && !finalHref.startsWith('http') && !finalHref.startsWith('/') && !finalHref.startsWith('./content/')) {
-            const cleanHref = finalHref.replace(/^\.\//, '');
-            finalHref = `./content/${folderPath ? folderPath + '/' : ''}${cleanHref}`;
+          let finalHref = href || '';
+          if (finalHref.startsWith('/files/')) {
+            finalHref = new URL(`content/${finalHref.slice('/files/'.length).split('/').map(encodeURIComponent).join('/')}`, appBaseUrl).href;
+          } else if (finalHref && !/^(?:[a-z]+:|\/\/|data:)/i.test(finalHref)) {
+            // Resolve relative image paths against the Markdown file itself.
+            finalHref = new URL(finalHref, markdownUrl).href;
           }
-          let out = `<img src="${finalHref}" alt="${text || ''}"`;
-          if (title) out += ` title="${title}"`;
+          const escapeAttr = value => String(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+          let out = `<img src="${escapeAttr(finalHref)}" alt="${escapeAttr(text || '')}"`;
+          if (title) out += ` title="${escapeAttr(title)}"`;
           out += '>';
           return out;
         };
 
         // Support Obsidian image format ![[filename.png]]
-        content = content.replace(/!\[\[(.*?)\]\]/g, (match, p1) => {
-          const cleanP1 = p1.replace(/^\.\//, '');
-          const imgPath = `./content/${folderPath ? folderPath + '/' : ''}${cleanP1}`;
-          return `![Obsidian Image](${imgPath})`;
+        content = content.replace(/!\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (match, imagePath, altText) => {
+          const imgUrl = new URL(imagePath.trim().split('/').map(encodeURIComponent).join('/'), markdownUrl);
+          return `![${(altText || 'Obsidian Image').replace(/\]/g, '\\]')}](${imgUrl.href})`;
         });
 
         renderedHtml = marked.parse(content, { renderer, gfm: true, breaks: false });
@@ -255,7 +261,8 @@ document.addEventListener('DOMContentLoaded', () => {
       loadContent(decodeURIComponent(hash));
       // Try to highlight in sidebar
       setTimeout(() => {
-        const titleEl = document.querySelector(`.nav-title[data-path="${decodeURIComponent(hash)}"]`);
+        const decodedPath = decodeURIComponent(hash);
+        const titleEl = [...document.querySelectorAll('.nav-title[data-path]')].find(el => el.dataset.path === decodedPath);
         if (titleEl) {
           titleEl.classList.add('active');
           // Expand parents
