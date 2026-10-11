@@ -38,6 +38,11 @@
 | `anon_root=/home/username/ftp` | Directory for anonymous.                                                           |
 | `write_enable=YES`             | Allow the usage of FTP commands: STOR, DELE, RNFR, RNTO, MKD, RMD, APPE, and SITE? |
 
+## FTP Bounce Attack
+
+- When scanning other devices in the FTP network or we want to execute commands, as an attacker we send them directly so in **FTP Bounce Attack**, we send these commands via a FTP server which allows `PORT Commands`.
+- This hides the origin of the device which has actually sent those commands. First you need to identify the **vulnerable FTP Server**.
+
 ---
 ## Questions and Solutions
 
