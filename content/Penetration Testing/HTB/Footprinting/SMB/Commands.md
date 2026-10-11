@@ -1,8 +1,21 @@
 
 ## Bruteforce Attack
 
+#### Domain Joined Account
+
+- This is to bruteforce domain joined accounts i.e. accounts associated with the Active Directory network.
+
 ```bash
 netexec smb <TARGET IP> -u <user/user wordlist> -p <password/password wordlist>
+```
+
+#### Non Domain Joined Account
+
+- If the `enum4linux` output shows Domain is `WORKGROUP` then the target machine/user is not domain joined. Hence, we need to look for passwords locally.
+- Use `enum4linux` first to determine whether the user/machine is domain joined or not based on that the `--local-auth` will be appended. If you get `Local User` state explicitly then use `--local-auth` and otherwise don't.
+
+```bash
+netexec smb <TARGET IP> -u <user/user wordlist> -p <password/password wordlist> --local-auth
 ```
 
 
