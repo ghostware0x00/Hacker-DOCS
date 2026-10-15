@@ -12,14 +12,14 @@
 	- Resolver
 
 
-|**Server Type**|**Description**|
-|---|---|
-|`DNS Root Server`|The root servers of the DNS are responsible for the top-level domains (`TLD`). As the last instance, they are only requested if the name server does not respond. Thus, a root server is a central interface between users and content on the Internet, as it links domain and IP address. The [Internet Corporation for Assigned Names and Numbers](https://www.icann.org/) (`ICANN`) coordinates the work of the root name servers. There are `13` such root servers around the globe.|
-|`Authoritative Nameserver`|Authoritative name servers hold authority for a particular zone. They only answer queries from their area of responsibility, and their information is binding. If an authoritative name server cannot answer a client's query, the root name server takes over at that point. Based on the country, company, etc., authoritative nameservers provide answers to recursive DNS nameservers, assisting in finding the specific web server(s).|
-|`Non-authoritative Nameserver`|Non-authoritative name servers are not responsible for a particular DNS zone. Instead, they collect information on specific DNS zones themselves, which is done using recursive or iterative DNS querying.|
-|`Caching DNS Server`|Caching DNS servers cache information from other name servers for a specified period. The authoritative name server determines the duration of this storage.|
-|`Forwarding Server`|Forwarding servers perform only one function: they forward DNS queries to another DNS server.|
-|`Resolver`|Resolvers are not authoritative DNS servers but perform name resolution locally in the computer or router.|
+| **Server Type**                | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DNS Root Server`              | The root servers of the DNS are responsible for the top-level domains (`TLD`). As the last instance, they are only requested if the name server does not respond. Thus, a root server is a central interface between users and content on the Internet, as it links domain and IP address. The [Internet Corporation for Assigned Names and Numbers](https://www.icann.org/) (`ICANN`) coordinates the work of the root name servers. There are `13` such root servers around the globe. |
+| `Authoritative Nameserver`     | Authoritative name servers hold authority for a particular zone. They only answer queries from their area of responsibility. An **authoritative name server** holds the original, official DNS records for a domain and provides final, true answers.                                                                                                                                                                                                                                    |
+| `Non-authoritative Nameserver` | a **non-authoritative name server** (usually a recursive or caching resolver) does not own the records and instead answers queries using temporarily stored data from a cache.                                                                                                                                                                                                                                                                                                           |
+| `Caching DNS Server`           | Caching DNS servers cache information from other name servers for a specified period. The authoritative name server determines the duration of this storage.                                                                                                                                                                                                                                                                                                                             |
+| `Forwarding Server`            | Forwarding servers perform only one function: they forward DNS queries to another DNS server.                                                                                                                                                                                                                                                                                                                                                                                            |
+| `Resolver`                     | Resolvers are not authoritative DNS servers but perform name resolution locally in the computer or router.                                                                                                                                                                                                                                                                                                                                                                               |
 
 ## Types of DNS Records
 
@@ -78,6 +78,17 @@
 - **SOA Record Transfer** -> The primary server upon receiving the request responds with a SOA record containing vital info about the zone, its serial number.
 - **DNS records transmission** -> The primary server transfers all the DNS records in the zone to the secondary server, one by one like A, AAAA, MX, CNAME, NS .etc. Once, all the data is transferred the primary server sends a signal to the secondary server indicating completion of zone transfer.
 - **ACK** -> The secondary server sends acknowledgement message to primary server.
+
+
+## DNS Spoofing / DNS Cache Poisoning
+
+- Changing the domain's IP address record to point to a malicious server instead of the legitimate server.
+- **EXAMPLE : **
+	- An attacker could intercept the communication between a user and a DNS server to route the user to a fraudulent destination instead of a legitimate one by performing a Man-in-the-Middle (`MITM`) attack.
+	- Exploiting a vulnerability found in a DNS server could yield control over the server by an attacker to modify the DNS records.
+### Local DNS Cache Poisoning
+
+- From a local network perspective, an attacker can also perform DNS Cache Poisoning using MITM tools like [Ettercap](https://www.ettercap-project.org/) or [Bettercap](https://www.bettercap.org/).
 
 ---
 ## Questions and Solutions
