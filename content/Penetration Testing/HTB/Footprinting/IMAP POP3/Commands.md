@@ -17,11 +17,28 @@ curl -k 'imaps://<TARGET IP>' --user <username>:<password> -v
 openssl s_client -connect <TARGET IP>:imaps
 ```
 
+**OR**
+
+- If `openssl` fails or connection times out use the below `netcat` command.
+
+```bash
+nc -C <TARGET IP> <PORT>
+```
+
 ## Connect to POP3
 
 ```bash
 openssl s_client -connect <TARGET IP>:pop3s
 ```
+
+## Bruteforce POP3
+
+- You must have the `PASSWORD` first to use it against each username from the `USER WORDLIST`.
+
+```bash
+hydra -L <USER WORDLIST> -p '<PASSWORD>' -f pop3://<TARGET IP/DOMAIN>
+```
+
 
 ## IMAP Commands
 
